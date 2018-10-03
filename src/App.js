@@ -12,7 +12,7 @@ const FilterType =
 
 function getDate() {
     const date = new Date();
-    return date.getDay() + '.' + date.getMinutes() + '.' + date.getFullYear();
+    return date.getDay() + '.' + date.getUTCMonth() + '.' + date.getFullYear();
 }
 
 function GetEmptyNote() {
@@ -25,19 +25,26 @@ function GetEmptyNote() {
     }
 }
 
-function GetReadoctorDiv() {
+function GetRedactorDiv() {
     return document.querySelector('#Redactor');
 }
 
 function ShowRedactor() {
-    let redactor = GetReadoctorDiv();
+    let redactor = GetRedactorDiv();
     redactor.style.visibility = 'visible';
 }
 
 function HideRedactor() {
-    let redactor = GetReadoctorDiv();
+    let redactor = GetRedactorDiv();
     redactor.style.visibility = 'hidden';
 }
+
+(function FloatRedactor() {
+    document.addEventListener('scroll', () => {
+        let scrollTop = window.pageYOffset;
+        document.querySelector('#RedactorBlock').style.marginTop = scrollTop + 'px';
+    })
+})();
 
 class App extends React.Component {
     constructor(props) {
@@ -60,9 +67,6 @@ class App extends React.Component {
                     tags: ['first', 'second']
                 }
             ],
-            newTitle: '',
-            newNote: '',
-            tags: '',
             isRedactorView: true,
             notesCounter: 2,
             isShortViewType: true,
@@ -106,7 +110,7 @@ class App extends React.Component {
         }
         this.onSaveClickButton = () => {
             const note = this.state.selectedNote;
-            if(!note.title) return null;
+            if (!note.title) return null;
             if (note.id === -1) {
                 const notes = [...this.state.notes];
                 let note = this.state.selectedNote;
@@ -114,7 +118,7 @@ class App extends React.Component {
                 note.date = getDate();
                 notes.push(note);
                 this.setState({
-                    notesCounter: this.state.notesCounter + 1,
+                    notesCounter: ++this.state.notesCounter,
                     notes: notes,
                 });
             }
@@ -190,7 +194,7 @@ class App extends React.Component {
                     <NoteList isShortView={this.state.isShortViewType} noteSelector={this.onItemChange}
                               notes={this.notes}/>
                 </div>
-                <div style={{
+                <div id={'RedactorBlock'} style={{
                     marginLeft: '35vw',
                     position: 'absolute',
                     borderLeft: '1px solid gray',
@@ -208,7 +212,8 @@ class App extends React.Component {
                         <br/>
                         <Redactor ChangeContext={this.onNoteChange} isRedactor={this.state.isRedactorView}
                                   newNote={this.state.selectedNote.note}/><br/>
-                        <input style={{width: '35vw', marginBottom: '1vh'}} maxLength={50} onChange={this.onTagsChange}
+                        <input style={{width: '35vw', marginBottom: '1vh'}} maxLength={50}
+                               onChange={this.onTagsChange}
                                value={this.state.selectedNote.tags.join(' ')}
                                placeholder={'Tag1 Tag2 Tag3'}/><br/>
                         <button onClick={this.onSaveClickButton}>Save</button>

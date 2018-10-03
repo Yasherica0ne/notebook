@@ -4,7 +4,7 @@ import Note from "./Note";
 export class NoteList extends React.Component {
     render() {
         const notes = this.props.notes;
-        if(notes == undefined) return null;
+        if(notes === undefined) return null;
         const viewType = this.props.isShortView;
         return (
             <div>
