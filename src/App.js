@@ -55,14 +55,14 @@ class App extends React.Component {
                 {
                     id: 0,
                     title: 'First note',
-                    note: 'Something important',
+                    note: '# Something important',
                     date: '02.10.2018',
                     tags: ['first', 'second', 'third']
                 },
                 {
                     id: 1,
                     title: 'Second note',
-                    note: 'Something important too',
+                    note: '## Something important too',
                     date: '03.10.2018',
                     tags: ['first', 'second']
                 }
@@ -174,9 +174,9 @@ class App extends React.Component {
 
     render() {
         return (
-            <React.Fragment>
+            <div style={{marginTop: "2vh"}}>
                 <div style={{position: 'absolute', width: '34vw', marginLeft: '1vw'}}>
-                    <input onChange={this.onSearchStringChange} placeholder={'Search'}/><br/>
+                    <input style={{width: '30vw'}} onChange={this.onSearchStringChange} placeholder={'Search'}/><br/>
                     <div>Filter&nbsp;
                         <select onChange={this.onFilterChange}>
                             <option value={FilterType.none}>None</option>
@@ -200,7 +200,7 @@ class App extends React.Component {
                     borderLeft: '1px solid gray',
                     paddingLeft: '1vh'
                 }}>
-                    <button onClick={this.onNewNoteButtonClick}>Add note</button>
+                    <button style={{fontSize: '3vh'}} onClick={this.onNewNoteButtonClick}>Add note</button>
                     <hr/>
                     <div id={'Redactor'} style={{visibility: 'hidden'}}>
                         <input style={{width: '30vw', marginBottom: '1vh'}} maxLength={50}
@@ -219,7 +219,7 @@ class App extends React.Component {
                         <button onClick={this.onSaveClickButton}>Save</button>
                     </div>
                 </div>
-            </React.Fragment>
+            </div>
         );
     }
 }
