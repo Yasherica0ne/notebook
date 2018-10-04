@@ -1,14 +1,14 @@
 import React from 'react';
-import Style from './App.css';
+import './App.css';
 import Redactor from "./Components/Redactor";
 import NoteList from "./Components/NoteList";
 
 const FilterType =
-    {
-        none: 1,
-        byTag: 2,
-        byTitle: 3
-    }
+{
+    none: 1,
+    byTag: 2,
+    byTitle: 3
+}
 
 function getDate() {
     const date = new Date();
@@ -168,15 +168,15 @@ class App extends React.Component {
             case `${FilterType.byTitle}`:
                 return this.state.notes.filter(note => note.title.includes(value));
             case `${FilterType.byTag}`:
-                return this.state.notes.filter(note => note.tags.indexOf(value) !== -1);
+                return this.state.notes.filter(note => note.tags.filter(tag => tag.includes(value)).length !== 0);
         }
     }
 
     render() {
         return (
-            <div style={{marginTop: "2vh"}}>
-                <div style={{position: 'absolute', width: '34vw', marginLeft: '1vw'}}>
-                    <input style={{width: '30vw'}} onChange={this.onSearchStringChange} placeholder={'Search'}/><br/>
+            <div style={{ marginTop: "2vh" }}>
+                <div style={{ position: 'absolute', width: '34vw', marginLeft: '1vw' }}>
+                    <input style={{ width: '30vw' }} onChange={this.onSearchStringChange} placeholder={'Search'} /><br />
                     <div>Filter&nbsp;
                         <select onChange={this.onFilterChange}>
                             <option value={FilterType.none}>None</option>
@@ -192,7 +192,7 @@ class App extends React.Component {
                         </select>
                     </div>
                     <NoteList isShortView={this.state.isShortViewType} noteSelector={this.onItemChange}
-                              notes={this.notes}/>
+                        notes={this.notes} />
                 </div>
                 <div id={'RedactorBlock'} style={{
                     marginLeft: '35vw',
@@ -200,22 +200,22 @@ class App extends React.Component {
                     borderLeft: '1px solid gray',
                     paddingLeft: '1vh'
                 }}>
-                    <button style={{fontSize: '3vh'}} onClick={this.onNewNoteButtonClick}>Add note</button>
-                    <hr/>
-                    <div id={'Redactor'} style={{visibility: 'hidden'}}>
-                        <input style={{width: '30vw', marginBottom: '1vh'}} maxLength={50}
-                               value={this.state.selectedNote.title}
-                               onChange={this.onTitleChange}
-                               placeholder={'Note tittle'}/><br/>
+                    <button style={{ fontSize: '2vh' }} onClick={this.onNewNoteButtonClick}>Add note</button>
+                    <hr />
+                    <div id={'Redactor'} style={{ visibility: 'hidden' }}>
+                        <input style={{ width: '30vw', marginBottom: '1vh' }} maxLength={50}
+                            value={this.state.selectedNote.title}
+                            onChange={this.onTitleChange}
+                            placeholder={'Note tittle'} /><br />
                         <button onClick={this.onRedactorButtonClick}>Redactor</button>
                         <button onClick={this.onUserViewButtonClick}>View</button>
-                        <br/>
+                        <br />
                         <Redactor ChangeContext={this.onNoteChange} isRedactor={this.state.isRedactorView}
-                                  newNote={this.state.selectedNote.note}/><br/>
-                        <input style={{width: '35vw', marginBottom: '1vh'}} maxLength={50}
-                               onChange={this.onTagsChange}
-                               value={this.state.selectedNote.tags.join(' ')}
-                               placeholder={'Tag1 Tag2 Tag3'}/><br/>
+                            newNote={this.state.selectedNote.note} /><br />
+                        <input style={{ width: '35vw', marginBottom: '1vh' }} maxLength={50}
+                            onChange={this.onTagsChange}
+                            value={this.state.selectedNote.tags.join(' ')}
+                            placeholder={'Tag1 Tag2 Tag3'} /><br />
                         <button onClick={this.onSaveClickButton}>Save</button>
                     </div>
                 </div>
