@@ -12,7 +12,7 @@ const FilterType =
 
 function getDate() {
     const date = new Date();
-    return date.getDay() + '.' + date.getUTCMonth() + '.' + date.getFullYear();
+    return date.getDay() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
 }
 
 function GetEmptyNote() {
@@ -23,20 +23,6 @@ function GetEmptyNote() {
         date: '',
         tags: []
     }
-}
-
-function GetRedactorDiv() {
-    return document.querySelector('#Redactor');
-}
-
-function ShowRedactor() {
-    let redactor = GetRedactorDiv();
-    redactor.style.visibility = 'visible';
-}
-
-function HideRedactor() {
-    let redactor = GetRedactorDiv();
-    redactor.style.visibility = 'hidden';
 }
 
 (function FloatRedactor() {
@@ -72,7 +58,8 @@ class App extends React.Component {
             isShortViewType: true,
             filterType: FilterType.none + '',
             searchString: '',
-            selectedNote: GetEmptyNote()
+            selectedNote: GetEmptyNote(),
+            redactorVisibility: 'hidden'
         };
 
         this.onTitleChange = (e) => {
@@ -131,7 +118,7 @@ class App extends React.Component {
                     notes: this.state.notes,
                 });
             }
-            HideRedactor();
+            this.HideRedactor();
         }
         this.onFilterChange = (e) => {
             this.setState({
@@ -144,16 +131,27 @@ class App extends React.Component {
             });
         }
         this.onItemChange = (e) => {
-            ShowRedactor();
+            this.ShowRedactor();
             const item = this.state.notes[e.target.id];
             this.setState({
                 selectedNote: item
             });
         }
         this.onNewNoteButtonClick = () => {
-            ShowRedactor();
+            this.ShowRedactor();
             this.setState({
                 selectedNote: GetEmptyNote()
+            });
+        }
+        this.ShowRedactor = () => {
+            this.setState({
+                redactorVisibility: 'visible'
+            });
+        }
+
+        this.HideRedactor = () => {
+            this.setState({
+                redactorVisibility: 'hidden'
             });
         }
     }
@@ -202,7 +200,7 @@ class App extends React.Component {
                 }}>
                     <button style={{ fontSize: '2vh' }} onClick={this.onNewNoteButtonClick}>Add note</button>
                     <hr />
-                    <div id={'Redactor'} style={{ visibility: 'hidden' }}>
+                    <div id={'Redactor'} style={{ visibility: this.state.redactorVisibility }}>
                         <input style={{ width: '30vw', marginBottom: '1vh' }} maxLength={50}
                             value={this.state.selectedNote.title}
                             onChange={this.onTitleChange}
